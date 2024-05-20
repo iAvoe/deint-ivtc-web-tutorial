@@ -18,7 +18,7 @@
 	</head>
 	<body class="text-gray-main">
         <div class="px-1 mb-3">
-            <h1>x264/5 教程<span class="text-blue-emph"> HTML 完整版</span> 附录</h1>
+            <h1>x264/5 教程<span class="text-blue-emph"> HTML 版</span> 附录</h1>
             <p>欢迎阅读！本教程仅算盲人摸象的业余分析，仅具备业余参考价值。若有什么不会的可以加群<a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>691892901</a>。<span class="text-red-emph">点击图片即可更改桌面和移动端的适配排版</span>。</p>
         </div>
         <div class="container-mobile rounded-9 border-main">
@@ -95,48 +95,50 @@
                 <li>EDI: 边缘定向插值 Edge-directed interpolation, 断线内两端定向连起而插值，差在仅处理空间域而略时域</li>
             </ul>
 
-            <table class="table-center overflow-auto">
-                <thead class="thead-no-border">
-                    <tr class="t-invert-dark">
-                        <th>♟滤镜</th>
-                        <th>简介</th>
-                        <th>兼容性</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-fieldmatch">fieldmatch</a></td>
-                        <td class="px-1 border-bottom">IVTC 的关键滤镜，基本是 AviSynth 场匹配脚本的<a href="http://avisynth.nl/index.php/TIVTC/TFM">TFM</a>。少另半或处理后仍 combed 的场则糊上并留标记给下列插值滤镜修补</td>
-                        <td class="px-1 t-light-gray text-smaller" rowspan="5">ffmpeg<br>AviSynth(+)<br>VapourSynth</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-decimate-1">decimate</a></td>
-                        <td class="px-1 border-bottom">删除重复帧的简单滤镜，严格说唯独 fieldmatch+decimate=IVTC，原生交错的源不存在 pulldown 拉出的重复场所以单纯反交错时不加</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-yadif-1">yadif</a>/<a href="https://ffmpeg.org/ffmpeg-filters.html#toc-yadif_005fcuda">yadif_cuda</a></td>
-                        <td class="px-1 border-bottom">同时参考时域空域临近像素的经典插值滤镜</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-invert-light"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif-1">bwdif</a>/<a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif_005fcuda">bwdif_cuda</a>/<a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif_005fvulkan">bwdif_vulkan</a></td>
-                        <td class="px-1 border-bottom">基于 yadif、<a href="https://ffmpeg.org/ffmpeg-filters.html#w3fdif">w3fdif</a>，能够在帧内帧间参考。支持多种 GPU 渲染器</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-invert-light"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-nnedi">nnedi3</a></td>
-                        <td class="px-1 border-bottom">神经网络插值的 bobbing-edi 滤镜，但因 EDI 特性而只参考帧内，动态复杂时可能在帧间连贯上劣于 bwdif</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-invert-dark"><a href="https://github.com/HomeOfVapourSynthEvolution/havsfunc/blob/master/havsfunc/havsfunc.py#L2005">QTGMC</a></td>
-                        <td class="px-1 border-bottom">调用 nnedi3 等多种反交错滤镜+mvtools 动态补偿反交错脚本<br>SuperFast 及更慢下用 nnedi3<br>Slower 及更慢下做色度动态搜索<br>设置 EZKeepGrain 以 (据个人喜好) 留噪</td>
-                        <td class="px-1 t-invert-light text-smaller" rowspan="2">AviSynth(+)<br>VapourSynth</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 t-invert-dark"><a href="http://avisynth.nl/index.php/IVTC_txt60mc">ivtc_txt60mc</a></td>
-                        <td class="px-1">用于上述的 PIP 情况，如 24t/24d，60i/30p两两混合等需手动测量并标记的段落，<a href="https://www.nmm-hd.org/newbbs/viewtopic.php?t=1367">点此查看说明</a></td>
-                    </tr>
-                </tbody>
-            </table>
-
+            <div class="overflow-auto">
+                <table class="table-fit-container align-items-center text-xs">
+                    <thead class="thead-no-border">
+                        <tr class="t-invert-dark">
+                            <th>♟滤镜</th>
+                            <th>简介</th>
+                            <th>兼容性</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-fieldmatch">fieldmatch</a></td>
+                            <td class="px-1 border-bottom">IVTC 的关键滤镜，基本是 AviSynth 场匹配脚本的<a href="http://avisynth.nl/index.php/TIVTC/TFM">TFM</a>。少另半或处理后仍 combed 的场则糊上并留标记给下列插值滤镜修补</td>
+                            <td class="px-1 t-light-gray text-smaller" rowspan="5">ffmpeg<br>AviSynth(+)<br>VapourSynth</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-decimate-1">decimate</a></td>
+                            <td class="px-1 border-bottom">删除重复帧的简单滤镜，严格说唯独 fieldmatch+decimate=IVTC，原生交错的源不存在 pulldown 拉出的重复场所以单纯反交错时不加</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-light-gray"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-yadif-1">yadif</a><br><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-yadif_005fcuda">yadif_cuda</a></td>
+                            <td class="px-1 border-bottom">同时参考时域空域临近像素的经典插值滤镜</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-invert-light"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif-1">bwdif</a><br><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif_005fcuda">bwdif_cuda</a><br><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-bwdif_005fvulkan">bwdif_vulkan</a></td>
+                            <td class="px-1 border-bottom">基于 yadif 与 <a href="https://ffmpeg.org/ffmpeg-filters.html#w3fdif">w3fdif</a>，能够在帧内帧间参考。支持多种 GPU 渲染器</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-invert-light"><a href="https://ffmpeg.org/ffmpeg-filters.html#toc-nnedi">nnedi3</a></td>
+                            <td class="px-1 border-bottom">神经网络插值的 bobbing-edi 滤镜，但因 EDI 特性而只参考帧内，动态复杂时可能在帧间连贯上劣于 bwdif</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-invert-dark"><a href="https://github.com/HomeOfVapourSynthEvolution/havsfunc/blob/master/havsfunc/havsfunc.py#L2005">QTGMC</a></td>
+                            <td class="px-1 border-bottom">调用 nnedi3 等多种反交错滤镜+mvtools 动态补偿反交错脚本<br>SuperFast 及更慢下用 nnedi3<br>Slower 及更慢下做色度动态搜索<br>设置 EZKeepGrain 以 (据个人喜好) 留噪</td>
+                            <td class="px-1 t-invert-light text-smaller" rowspan="2">AviSynth(+)<br>VapourSynth</td>
+                        </tr>
+                        <tr>
+                            <td class="px-1 t-invert-dark"><a href="http://avisynth.nl/index.php/IVTC_txt60mc">ivtc_txt60mc</a></td>
+                            <td class="px-1">用于上述的 PIP 情况，如 24t/24d，60i/30p两两混合等需手动测量并标记的段落，<a href="https://www.nmm-hd.org/newbbs/viewtopic.php?t=1367">点此查看说明</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        
             <h2>滤镜用例</h2>
             <h3>ffmpeg IVTC 参数</h3>
             <h4>快速去交错，使用简单，效果一般：</h4>
