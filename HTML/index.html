@@ -88,11 +88,11 @@
 
             <h2>去交错的算法与滤镜</h2>
             <ul>
-                <li>Half-sizing 上下场各作半高的逐行视频播放，保原生交错 0.5:0.5(not)pulldown 源的帧率但纵向分辨率减半</li>
-                <li>Weaving 上下场简单拼成一帧，处理原生交错 0.5:0.5(not)pulldown 源会导致时域信息丢失及梳状横纹 combing</li>
-                <li>Blending 上下帧位置上对应的场在播放时临时混成一帧，由于混的帧与另半场不匹配所以导致鬼影 ghosting</li>
-                <li>Bobbing 在 Half-sizing 的基础上把图拉回原高，搭配好的插值/补帧滤镜能产出非常好的结果</li>
-                <li>EDI: 边缘定向插值 Edge-directed interpolation, 断线内两端定向连起而插值，差在仅处理空间域而略时域</li>
+                <li><b>Half-sizing</b>：上下场各作半高的逐行视频播放，保原生交错 0.5:0.5(not)pulldown 源的帧率但纵向分辨率减半</li>
+                <li><b>Weaving</b>：上下场简单拼成一帧，处理原生交错 0.5:0.5(not)pulldown 源会导致时域信息丢失及梳状横纹 combing</li>
+                <li><b>Blending</b>：上下帧位置上对应的场在播放时临时混成一帧，由于混的帧与另半场不匹配所以导致鬼影 ghosting</li>
+                <li><b>Bobbing</b>：在 Half-sizing 的基础上把图拉回原高，搭配好的插值/补帧滤镜能产出非常好的结果</li>
+                <li><b>EDI</b>：边缘定向插值 Edge-directed interpolation, 断线内两端定向连起而插值，差在仅处理空间域而略时域</li>
             </ul>
 
             <div class="overflow-auto">
