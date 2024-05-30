@@ -24,12 +24,13 @@
             <h2>地图</h2>
             <ol class="font-monospace">
                 <li><a href="../../x264-web-tutorial/HTML/index.html">x264 教程网页版</a></li>
-                <li><a href="../../x264-web-tutorial/HTML/index.html">x265 教程网页版</a></li>
+                <li><a href="../../x265-web-tutorial/HTML/index.html">x265 教程网页版</a></li>
                 <li>附录 α：<a href="https://www.nazorip.site/archives/44/">QAAC 音频压缩教程</a> 或 <a href="https://github.com/iAvoe/QAAC-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a></li>
                 <li>附录 β：<a href="https://nazorip.site/archives/334/">x264，libx264，x265，libx265 压制教程急用版</a> 或 <a href=""> Github 副本</a></li>
                 <li>附录 γ：<a href="https://nazorip.site/archives/169/">ffprobe 教程</a> 或 <a href="https://github.com/iAvoe/FFprobe-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a></li>
                 <li>附录 δ：<a href="https://nazorip.site/archives/1068/">ffprobe + Excel 绘制码率曲线，帧类型饼图</a></li>
-                <li>附录 ε：<a href="../../deint-ivtc-web-tutorial/HTML/index.html" class="disabled">交错转逐行与 IVTC 处理（尔于此地）</a></li>
+                <li>附录 ε：<a href="../../deint-ivtc-web-tutorial/HTML/index.html" class="disabled">交错转逐行与 IVTC 处理（你在这里）</a></li>
+                <li>附录 ζ: <a href="../../img-sequence-enc-web-tutorial/HTML/index.html">图像序列的处理</a></li><!-- 后续顺序：η θ ι κ λ μ -->
                 <li>相关：<a href="https://nazorip.site/archives/1052/">mpv 播放器的安装与设置</a></li>
             </ol>
             <!-- } -->
@@ -197,9 +198,11 @@ Trim(112305,124545).SeparateFields().SelectEvery(10,0,  2,3,4,5,  7,8,9).Weave()
             <h3>AviSynth 使用 TFM，TDecimate 的自动 IVTC</h3>
             <p>“自动”包括了处理素材拼接多重下拉源。</p>
             <pre><code>LWLibavVideoSource("<源>")
-# Pass1：分别导出 TFM 和 TDecimate 分析结果
 
+# Pass1：分别导出 TFM 和 TDecimate 分析结果
+# 导出 TFM 分析结果
 tfm(PP=5,cthresh=5,MI=60,output="<span class="text-blue-emph">tfm-matched.txt</span>")
+# 注：
 # order=-1 自动判断上下场优先（默认值）
 # mode=5   检查 p/c/n + u/b
 # slow=1   使用中速场匹配 fieldmatch 检测算法（默认值）
@@ -207,20 +210,24 @@ tfm(PP=5,cthresh=5,MI=60,output="<span class="text-blue-emph">tfm-matched.txt</s
 # MI=60    判断“问题像素”的数量阈值，低于阈值则不算（默认 80）
 # output   导出文件
 
+# 导出 TDecimate 分析结果
 tdecimate(mode=4,output="<span class="text-blue-emph">tdec-metrics.log</span>")
 # mode=4   导出反交错分析结果
 # output   导出文件
 
 # Pass2：  模式 5 - VFR+pass=2（需 hybrid=2，cycleR=1）
 
+# 导入 TFM 分析结果并进行场重组和去梳
 tfm(input=<span class="text-blue-emph">tfm-matched.txt</span>)
-tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="<span class="text-blue-emph">tdec-metrics.log</span>",tfmIn="<span class="text-blue-emph">tfm-matched.txt</span>",mkvOut="<span class="text-blue-emph">导出时间码.txt</span>")
 
-# conCycleTP 是模式5下可用的特殊conCycle，设置hybrid大于0时的最少检测任意视频段的循环次数
-# hybrid=2   指定视频段处理方法为导出为mkv时间码文件
+# 导入 TFM 和 TDecimate 分析结果
+tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="<span class="text-blue-emph">tdec-metrics.log</span>",tfmIn="<span class="text-blue-emph">tfm-matched.txt</span>",mkvOut="<span class="text-blue-emph">导出时间码.txt</span>")
+# 注：
+# conCycleTP 是模式 5 下可用的特殊 conCycle，设置 hybrid 大于 0 时的最少检测任意视频段的循环次数
+# hybrid=2   指定视频段处理方法为导出为 mkv 时间码文件
 # vfrDec=0   删除循环中最为相似的帧
 # vfrDec=1   删除循环中连续重复最长的帧，适用于动画
-# conCycleTP 控制删帧强度. 最小值2. 值越大循环检查次数越多，删帧次数越多
+# conCycleTP 控制删帧强度，最小值2。值越大循环检查次数越多，删帧次数越多
 # input      导入 TDecimate 分析结果
 # tfmIn      导入 TFM 分析结果</code></pre>
 
