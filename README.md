@@ -31,7 +31,7 @@
 
 ### 内容范围
 
-逐行 Progressive，交错 Interlaced，帧率，场率，A:B Pulldown / telecine，IVTC，所有 Pulldown 的类型，特殊 pulldown 情况的类型，去交错的算法与滤镜与对照表格，ffmpeg 方案，AviSynth 方案，VapourSynth 方案
+逐行 Progressive，交错 Interlaced，帧率，场率，A:B Pulldown / telecine，IVTC，combing，Weaving，Blending，Bobbing，EDI，pcnub，nnedi3，qtgmc，所有 Pulldown 的类型，特殊 pulldown 情况的类型，去交错的算法表与滤镜表，ffmpeg 方案，AviSynth 方案，VapourSynth 方案
 
 ### 繁体中文支持
 
