@@ -97,8 +97,8 @@
 
             <h3>2:2:2:2:2:2:2:2:2:2:2:3 Euro-pulldown</h3>
             <div class="row">
-                <p id="LR-UD-005" class="col-10">24fps 电影标准转换为 PAL 视频时，每 12 帧拷一上场，每 24 帧拷一下场，加快到每秒 50 场（50fps）。IVTC 即每 50 场删除第 23 场和第 48 场（从零开始数即第 22 场和第 47 场）。</p>
-                <img src="files/image4.png" alt="2:2:2:2:2:2:2:2:2:2:2:3 pulldown" id="LR-UD-006" class="img-small img-right col-2 mb-auto" >
+                <p id="LR-UD-007" class="col-10">24fps 电影标准转换为 PAL 视频时，每 12 帧拷一上场，每 24 帧拷一下场，加快到每秒 50 场（50fps）。IVTC 即每 50 场删除第 23 场和第 48 场（从零开始数即第 22 场和第 47 场）。</p>
+                <img src="files/image4.png" alt="2:2:2:2:2:2:2:2:2:2:2:3 pulldown" id="LR-UD-008" class="img-small img-right col-2 mb-auto" >
             </div>
 
             <h3>0.5:0.5 not pulldown (30i,60i)</h3>
@@ -183,7 +183,7 @@
                 <li>bwdif 同样不用 <code>-deint=all</code> 而用-deint=interlaced 以跟踪 fieldmatch 标记，用 send_field 设定场率=帧率</li>
             </ul>
             <pre><code class="text-smaller language-powershell">
--vf "fieldmatch=combmatch=full,bwdif=mode=<span class="text-blue-emph">send_field</span>:parity=auto:deint=interlaced" -vsync 0
+-vf "fieldmatch=combmatch=full,bwdif=mode=send_field:parity=auto:deint=interlaced" -vsync 0
             </code></pre>
 
             <h4>fieldmatch + bwdif 去梳与 IVTC</h4>
