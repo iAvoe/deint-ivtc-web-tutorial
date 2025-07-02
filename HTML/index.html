@@ -13,7 +13,10 @@
         <script src="./files/mathJax3-tex-svg.js" defer></script>
         <!-- Custom CSS Codes <link rel="stylesheet" href="./files/desktopContainer.css"> -->
         <link rel="stylesheet" href="./files/tutorial.css">
-        
+        <!-- highlight JS & CSS (language-cpp, language-bash, language-powershell) -->
+        <link rel="stylesheet" href="./files/docco.min.css">
+        <script src="./files/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <title>x264/5 教程附录——反交错与IVTC</title>
 	</head>
 	<body class="text-gray-main">
@@ -164,25 +167,36 @@
             <h2>滤镜用例</h2>
             <h3>ffmpeg IVTC 参数</h3>
             <h4>快速去交错，使用简单，效果一般：</h4>
-            <code>-vf "yadif-deint=all"</code>
+            <pre><code class="text-smaller language-powershell">
+-vf "yadif-deint=all"
+            </code></pre>
 
             <h4>fieldmatch + yadif 去梳与 IVTC</h4>
             <p>fieldmatch 滤镜整理并标记上下场，yadif 滤镜启用 <code>-deint=interlaced</code> 以跟踪 fieldmatch 所留的标记：</p>
-            <pre><code>-vf "fieldmatch=mode=pc_n_ub:combmatch=full,yadif=deint=interlaced,decimate" -vsync 0 -r 24</code></pre>
+            <pre><code class="text-smaller language-powershell">
+-vf "fieldmatch=mode=pc_n_ub:combmatch=full,yadif=deint=interlaced,decimate" -vsync 0 -r 24
+            </code></pre>
 
             <h4>fieldmatch + bwdif 去梳与去交错</h4>
             <ul>
                 <li>原生交错源的场率等于帧率，因此不需要（用参数 <code>-r</code>）重新设置帧率到电影标准的 24fps</li>
                 <li>bwdif 同样不用 <code>-deint=all</code> 而用-deint=interlaced 以跟踪 fieldmatch 标记，用 send_field 设定场率=帧率</li>
             </ul>
-            <pre><code>-vf "fieldmatch=combmatch=full,bwdif=mode=<span class="text-blue-emph">send_field</span>:parity=auto:deint=interlaced" -vsync 0</code></pre>
+            <pre><code class="text-smaller language-powershell">
+-vf "fieldmatch=combmatch=full,bwdif=mode=<span class="text-blue-emph">send_field</span>:parity=auto:deint=interlaced" -vsync 0
+            </code></pre>
 
             <h4>fieldmatch + bwdif 去梳与 IVTC</h4>
             <p>从 send_field 模式改为 send_frame，用参数 <code>-r 24</code> 修改帧率，decimate 模式删除多余的场。</p>
-            <pre><code>-vf "fieldmatch=mode=pc_n_ub:combmatch=full,bwdif=mode=<span class="text-blue-emph">send_frame</span>:parity=auto:deint=interlaced,<span class="text-blue-emph">decimate</span>" -vsync 0 <span class="text-blue-emph">-r 24</span></code></pre>
+            <pre><code class="text-smaller language-powershell">
+-vf "fieldmatch=mode=pc_n_ub:combmatch=full,bwdif=mode=send_frame:parity=auto:deint=interlaced,decimate" -vsync 0 -r 24
+            </code></pre>
 
             <h4>fieldmatch + nnedi3 去梳与 IVTC</h4>
-            <pre><code>-vf "fieldmatch=mode=pc_n_ub:combmatch=full:blockx=16:blocky=24:combpel=128,nnedi=weights=C:\<a href="https://github.com/dubhater/vapoursynth-nnedi3/blob/master/src/nnedi3_weights.bin">点击下载训练数据</a>\nnedi3_weights.bin:field=af:nns=n32:qual=slow:etype=mse,decimate" -vsync 0 -r 24</code></pre>
+            <p>需要下载训练数据，点击：<a href="https://github.com/dubhater/vapoursynth-nnedi3/blob/master/src/nnedi3_weights.bin">下载 nnedi3_weights.bin</a></p>
+            <pre><code class="text-smaller language-powershell">
+-vf "fieldmatch=mode=pc_n_ub:combmatch=full:blockx=16:blocky=24:combpel=128,nnedi=weights=C:\训练数据文件夹\nnedi3_weights.bin:field=af:nns=n32:qual=slow:etype=mse,decimate" -vsync 0 -r 24
+            </code></pre>
 
             <h4>p/c/n/u/b 的意义</h4>
             <p>ffmpeg 的 fieldmatch 滤镜中，p/c/n 表示尝试匹配当前场的另一半场的前一场（previous）、同一场（current）或后一场（next）。否则会尝试使用 u/b，即从另一半场尝试匹配 uǝxʇ（next 反）和 bɹǝʌᴉons（previous 反）。</p>
@@ -196,20 +210,22 @@
                 <li>使用 Waving 滤镜拼合为帧</li>
                 <li>最后的例子则是使用 SelectEvery 滤镜恢复 Euro pulldown</li>
             </ol>
-            <pre><code>       Trim(0, 579).SeparateFields().SelectEvery(10,  1,2,3,4,  6,7,8,9).Weave() +\
+            <pre><code class="text-smaller language-powershell">
+       Trim(0, 579).SeparateFields().SelectEvery(10,  1,2,3,4,  6,7,8,9).Weave() +\
    Trim(580, 51891).SeparateFields().SelectEvery(10,0,1,2,3,  5,6,7,8  ).Weave() +\
  Trim(51892, 70278).SeparateFields().SelectEvery(10,0,1,2,  4,5,6,7,  9).Weave() +\
 Trim(70279, 112304).SeparateFields().SelectEvery(10,0,1,  3,4,5,6,  8,9).Weave() +\
 Trim(112305,124545).SeparateFields().SelectEvery(10,0,  2,3,4,5,  7,8,9).Weave() +\
-    Trim(124546, 0).SeparateFields().SelectEvery(50,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,<span class="text-blue-emph">26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49</span>).Weave()</code></pre>
+    Trim(124546, 0).SeparateFields().SelectEvery(50,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49).Weave()
+            </code></pre>
 
             <h3>AviSynth 使用 TFM，TDecimate 的自动 IVTC</h3>
             <p>“自动”包括了处理素材拼接多重下拉源。</p>
-            <pre><code>LWLibavVideoSource("<源>")
-
+            <pre><code class="text-smaller language-powershell">
+LWLibavVideoSource("&lt;源&gt;")
 # Pass1：分别导出 TFM 和 TDecimate 分析结果
 # 导出 TFM 分析结果
-tfm(PP=5,cthresh=5,MI=60,output="<span class="text-blue-emph">tfm-matched.txt</span>")
+tfm(PP=5,cthresh=5,MI=60,output="&lt;.\tfm-matched.txt&gt;")
 # 注：
 # order=-1 自动判断上下场优先（默认值）
 # mode=5   检查 p/c/n + u/b
@@ -219,17 +235,17 @@ tfm(PP=5,cthresh=5,MI=60,output="<span class="text-blue-emph">tfm-matched.txt</s
 # output   导出文件
 
 # 导出 TDecimate 分析结果
-tdecimate(mode=4,output="<span class="text-blue-emph">tdec-metrics.log</span>")
+tdecimate(mode=4,output="&lt;.\tdec-metrics.log&gt;")
 # mode=4   导出反交错分析结果
 # output   导出文件
 
 # Pass2：  模式 5 - VFR+pass=2（需 hybrid=2，cycleR=1）
 
 # 导入 TFM 分析结果并进行场重组和去梳
-tfm(input=<span class="text-blue-emph">tfm-matched.txt</span>)
+tfm(input="&lt;.\tfm-matched.txt&gt;")
 
 # 导入 TFM 和 TDecimate 分析结果
-tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="<span class="text-blue-emph">tdec-metrics.log</span>",tfmIn="<span class="text-blue-emph">tfm-matched.txt</span>",mkvOut="<span class="text-blue-emph">导出时间码.txt</span>")
+tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="&lt;.\tdec-metrics.log&gt;",tfmIn="&lt;.\tfm-matched.txt&gt;",mkvOut="&lt;导出时间码.txt&lt;")
 # 注：
 # conCycleTP 是模式 5 下可用的特殊 conCycle，设置 hybrid 大于 0 时的最少检测任意视频段的循环次数
 # hybrid=2   指定视频段处理方法为导出为 mkv 时间码文件
@@ -237,17 +253,19 @@ tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="<span class="
 # vfrDec=1   删除循环中连续重复最长的帧，适用于动画
 # conCycleTP 控制删帧强度，最小值2。值越大循环检查次数越多，删帧次数越多
 # input      导入 TDecimate 分析结果
-# tfmIn      导入 TFM 分析结果</code></pre>
+# tfmIn      导入 TFM 分析结果
+            </code></pre>
 
             <h3>VapourSynth 使用 QTGMC 的自动 IVTC</h3>
             <p>“自动”包括了处理素材拼接多重下拉源。</p>
-            <pre><code>import vapoursynth
+            <pre><code class="text-smaller language-powershell">
+import vapoursynth
 from vapoursynth import core
 import havsfunc as haf
 import mvsfunc as mvf
 
 # 使用 L-SMASH-Works 导入源
-src = core.lsmas.LWLibavSource("<源>") 
+src = core.lsmas.LWLibavSource("&lt;源&gt;") 
 
 # 指定输入源，上场优先(1)，p/c+n+u/b 模式匹配(3)
 match = core.vivtc.VFM(src, 1, mode=3)
@@ -260,8 +278,8 @@ deint = haf.QTGMC(match, TFF=True, FPSDivisor=2, Preset="Very Slow", Border=True
 pp_clip = mvf.FilterCombed(match, deint)
 
 # Decimate删重复帧，res.set_output()，pp_clip.set_output()可预览
-res = core.vivtc.VDecimate(pp_clip)</code></pre>
-        <p></p>
+res = core.vivtc.VDecimate(pp_clip)
+            </code></pre>
         </div>
 
         <!-- Footer -->
