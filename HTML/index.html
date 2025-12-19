@@ -23,31 +23,10 @@
         <div class="container-title">
             <h1>x264/5 教程<span class="text-blue-emph"> HTML 版</span> 附录</h1>
             <p>欢迎阅读！若有任何问题，请加入 QQ 群 <a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">691892901</a>。入门时，请先阅读 x264 视频压缩教程综合版，并可参考急用版教程进行编码压制。点击图片即可更改桌面和移动端的适配排版。</p>
-            <!-- x264/5 教程副本，更改需手动同步 { -->
-            <h2>地图</h2>
-            <ol class="font-monospace">
-                <li><a href="../../x264-web-tutorial/HTML/index.html">x264 教程网页版</a></li>
-                <li><a href="../../x265-web-tutorial/HTML/index.html">x265 教程网页版</a></li>
-                <li>附录 α：<a href="https://www.nazorip.site/archives/44/">QAAC 音频压缩教程</a> 或 <a href="https://github.com/iAvoe/QAAC-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a></li>
-                <li>附录 β：<a href="https://nazorip.site/archives/334/">x264，libx264，x265，libx265 压制教程急用版</a> 或 <a href=""> Github 副本</a></li>
-                <li>附录 γ：<a href="https://nazorip.site/archives/169/">ffprobe 教程</a> 或 <a href="https://github.com/iAvoe/FFprobe-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a></li>
-                <li>附录 δ：<a href="https://nazorip.site/archives/1068/">ffprobe + Excel 绘制码率曲线，帧类型饼图</a></li>
-                <li>附录 ε：<a href="../../deint-ivtc-web-tutorial/HTML/index.html" class="disabled">交错转逐行与 IVTC 处理（你在这里）</a></li>
-                <li>附录 ζ：<a href="../../img-sequence-enc-web-tutorial/HTML/index.html">图像序列的处理</a></li><!-- 后续顺序：η θ ι κ λ μ -->
-                <li>相关：<a href="https://nazorip.site/archives/1052/">mpv 播放器的安装与设置</a></li>
-            </ol>
-            <h3>打印支持</h3>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="toggleCollapseAll()" disabled>1/5. 点击同步展开/折叠所有内容</button>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printMode(printT, printC)">2. 点击进入文档的打印模式排版</button>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="window.print()">3. 点击打印</button>
-            <p class="font-monospace px-1">推荐设置：彩色模式、不打印背景、0.04 英寸边距、打印页眉页脚</p>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printModeOff(printT, printC, widthOffset)">4. 点击退出打印排版</button>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="toggleCollapseAll()" disabled>1/5. 点击同步展开/折叠所有内容</button>
-            <!-- } -->
-            <p class="font-monospace">页数：A4 纸与 US Letter 信纸都需要打印 9 页。建议使用双面打印 + 侧面钉装，或只打印需要的部分以节约纸张。</p>
         </div>
         <div class="container-mobile rounded-9 border-main">
-            <h2>反交错，转逐行，IVTC</h2>
+            <h2 class="mt-5">反交错，转逐行，IVTC</h2>
+
             <h3>逐行 Progressive 与交错 Interlaced 扫描</h3>
             <p>逐行扫描通过一行行从左到右地刷新像素来构建图像，是最为常用的屏幕刷新方式。交错扫描的方法不同，它使用 YUV 4:1:1 采样，将屏幕的奇数像素行视为一个场，偶数像素行视为另一个场。这两个场在录制时错开一定时间，这样在模拟电视上观看时会产生 60fps 的视觉效果。交错扫描的原理是为了节省模拟电视信号的频段区间（与收音机接收电台信号一样）。因此，通过在时间上分隔行来节省空间，可以几乎将每个频道的频宽减半，例如（<span class="text-blue-math">\(525 \text{行} \times 30\text{fps} = 15.75 \text{MHz}\)</span>）。</p>
 
@@ -71,7 +50,8 @@
             <h2>Pulldown 的类型</h2>
             <h3>2:2:2:4 / 2:2:4:2 / 2:4:2:2 / 4:2:2:2 (24d)</h3>
             <div class="row">
-                <p id="LR-UD-001" class="col-10">「一帧四场」的情况。这种源会造成播放卡顿而应该不存在。此处仅用于说明右图。<span class="text-gray-side">图：用 Φ 表示一帧被分为两场，上场为奇数、下场为偶数。可见第四帧由 D07 的上场，D08 的下场组合出来，而原来的第五帧被后延，添入了 D07，D08 而实现了「一帧四场」。已知 24fps 的电影格式若分成 4 帧一组，则一共有 6 组可分，而每组多了一套上场下场就代表每秒多出了 6 帧，或 12 场，相加得到 30fps（或按照“场每秒”则算作 60 fps），从而符合了 NTSC 电视的帧率要求。</span>至于 2:2:4:2 以及其它格式，单纯是被重复帧的相对位置不同所造成的。</p>
+                <p id="LR-UD-001" class="col-10">「一帧四场」的奇况。这种源会自然地造成播放卡顿，因此理论上不应存在。此处仅用于说明右图。<br>
+                <span class="text-gray-side">图：用 Φ 表示一帧被分为两场，上场为奇数、下场为偶数。可见第四帧由 D07 的上场，D08 的下场组合出来，而原来的第五帧被后延，添入了 D07，D08 而实现了「一帧四场」。已知 24fps 的电影格式若分成 4 帧一组，则一共有 6 组可分，而每组多了一套上场下场就代表每秒多出了 6 帧，或 12 场，相加得到 30fps（或按照“场每秒”则算作 60 fps），从而符合了 NTSC 电视的帧率要求。至于 2:2:4:2 以及其它格式，单纯是被重复帧的相对位置不同所造成的。</span></p>
                 <img src="files/image1.png" alt="2:2:2:4 / 2:2:4:2 / 2:4:2:2 / 4:2:2:2 (24d)" id="LR-UD-002" class="img-small img-right col-2 mb-auto" >
             </div>
 
@@ -245,7 +225,7 @@ tdecimate(mode=4,output="&lt;.\tdec-metrics.log&gt;")
 tfm(input="&lt;.\tfm-matched.txt&gt;")
 
 # 导入 TFM 和 TDecimate 分析结果
-tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="&lt;.\tdec-metrics.log&gt;",tfmIn="&lt;.\tfm-matched.txt&gt;",mkvOut="&lt;导出时间码.txt&lt;")
+tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="&lt;.\tdec-metrics.log&gt;",tfmIn="&lt;.\tfm-matched.txt&gt;",mkvOut="&lt;导出时间码.txt&gt;")
 # 注：
 # conCycleTP 是模式 5 下可用的特殊 conCycle，设置 hybrid 大于 0 时的最少检测任意视频段的循环次数
 # hybrid=2   指定视频段处理方法为导出为 mkv 时间码文件
@@ -258,7 +238,7 @@ tdecimate(mode=5,vidDetect=1,hybrid=2,vfrDec=0,conCycleTP=5,input="&lt;.\tdec-me
 
             <h3>VapourSynth 使用 QTGMC 的自动 IVTC</h3>
             <p>“自动”包括了处理素材拼接多重下拉源。</p>
-            <pre><code class="text-smaller language-powershell">
+            <pre class="mb-3"><code class="text-smaller language-powershell">
 import vapoursynth
 from vapoursynth import core
 import havsfunc as haf
